@@ -1,0 +1,28 @@
+﻿# Secrets
+.env
+**/.env
+
+# Python
+venv/
+**/venv/
+__pycache__/
+*.pyc
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Node and Expo
+node_modules/
+.expo/
+dist/
+web-build/
+
+# Environment and editor files
+.DS_Store
+.vscode/
+
+# Temporary backup files
+*.backup
+*.bak
