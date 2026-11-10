@@ -2,14 +2,12 @@
 import axios from 'axios';
 import { Platform } from 'react-native';
 
-const BASE_URL =
-  Platform.OS === 'android'
-    ? 'http://10.0.2.2:8000'
-    : 'http://localhost:8000';
+// Live Render backend
+const BASE_URL = 'https://bazaarbandhu-api.onrender.com';
 
 export const api = axios.create({
   baseURL: BASE_URL,
-  timeout: 30000,
+  timeout: 60000,
 });
 
 // Dashboard APIs
@@ -135,6 +133,7 @@ const convertBrowserAudioToWav = async (
 
   try {
     const arrayBuffer = await blob.arrayBuffer();
+
     const audioBuffer =
       await audioContext.decodeAudioData(arrayBuffer);
 
@@ -168,7 +167,9 @@ export const transcribeAudio = async (
     );
 
     if (originalBlob.size === 0) {
-      throw new Error('Recording is empty. Please record again.');
+      throw new Error(
+        'Recording is empty. Please record again.'
+      );
     }
 
     const wavBlob =
@@ -219,7 +220,9 @@ export const transcribeAudio = async (
 // Parse transcript into sale details
 export const parseVoiceSale = async (transcript: string) => {
   if (!transcript || !transcript.trim()) {
-    throw new Error('Transcript is empty. Cannot parse sale.');
+    throw new Error(
+      'Transcript is empty. Cannot parse sale.'
+    );
   }
 
   const res = await api.post('/api/sales/parse', {
@@ -227,7 +230,9 @@ export const parseVoiceSale = async (transcript: string) => {
   });
 
   if (!res.data?.success || !res.data?.data) {
-    throw new Error('Could not extract sale details from speech.');
+    throw new Error(
+      'Could not extract sale details from speech.'
+    );
   }
 
   return res.data.data;
@@ -258,6 +263,7 @@ export const getSales = async (vendorId: number = 1) => {
   const res = await api.get('/api/sales', {
     params: { vendor_id: vendorId },
   });
+
   return res.data;
 };
 
@@ -266,7 +272,11 @@ export const updateSale = async (
   saleId: number,
   saleData: any
 ) => {
-  const res = await api.put(`/api/sales/${saleId}`, saleData);
+  const res = await api.put(
+    `/api/sales/${saleId}`,
+    saleData
+  );
+
   return res.data;
 };
 
@@ -275,8 +285,12 @@ export const deleteSale = async (
   saleId: number,
   vendorId: number = 1
 ) => {
-  const res = await api.delete(`/api/sales/${saleId}`, {
-    params: { vendor_id: vendorId },
-  });
+  const res = await api.delete(
+    `/api/sales/${saleId}`,
+    {
+      params: { vendor_id: vendorId },
+    }
+  );
+
   return res.data;
 };
